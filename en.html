@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encrypt and hash your texts securely with our Encryption and Hashing Tool. MD5, SHA-256, AES, DES, RSA and more!">
+    <meta name="keywords" content="encryption, hashing, MD5, SHA-256, AES, DES, RSA, security, online encryption tool, data encryption, online hashing">
+    <meta name="author" content="Secure Encryption Team">
+    <meta property="og:title" content="Encryption and Hashing Tool | MD5, SHA, AES, DES, RSA">
+    <meta property="og:description" content="Securely encrypt and hash your texts with popular encryption algorithms to ensure data security.">
+    <meta property="og:image" content="URL_TO_IMAGE">
+    <meta name="google-site-verification" content="ZHnog2yNJFAJ5Own8Meq1JK6bRphKI3CMBhwTmBHIGA" />
+    <title>Encryption and Hashing Tool | MD5, SHA, AES, DES, RSA</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #444;
+            text-align: center;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 25px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 18px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e4e4e4;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+        }
+        .key-input {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        h3 {
+            margin-top: 40px;
+            text-align: center;
+            color: #555;
+        }
+        p {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body class="container">
+    <h1>Encryption and Hashing Tool</h1>
+    <h2>Secure Encryption and Hashing Solutions</h2>
+    <p>This online encryption and hashing tool allows you to securely encrypt and decrypt your texts. Popular algorithms such as MD5, SHA-1, SHA-256, AES, DES, RSA, and more are supported. Ensure your data security with these encryption tools.</p>
+    
+    <div>
+        <label for="inputText">Enter Text:</label>
+        <input type="text" id="inputText" placeholder="Enter text here" />
+
+        <label for="operation">Choose Operation:</label>
+        <select id="operation" onchange="toggleFields()">
+            <option value="MD5">MD5 Hash</option>
+            <option value="SHA1">SHA-1 Hash</option>
+            <option value="SHA256">SHA-256 Hash</option>
+            <option value="SHA512">SHA-512 Hash</option>
+            <option value="CRC32">CRC-32 Calculate</option>
+            <option value="DES">DES Encrypt & Decrypt</option>
+            <option value="Vigenere">Vigenère Encrypt & Decrypt</option>
+            <option value="AES">AES Encrypt & Decrypt</option>
+            <option value="Afin">Affine Encrypt & Decrypt</option>
+            <option value="Sezar">Caesar Cipher</option>
+            <option value="RSA">RSA Encrypt & Decrypt</option>
+            <option value="Atbash">Atbash Cipher</option>
+            <option value="DiffieHelman">Diffie-Hellman Key Exchange</option>
+        </select>
+
+        <div id="additionalFields"></div>
+
+        <button onclick="process()">Perform Operation</button>
+
+        <div id="results"></div>
+    </div>
+    
+    <h3>Popular Encryption Algorithms</h3>
+    <p><strong>MD5:</strong> A 128-bit hash function used for data integrity verification.</p>
+    <p><strong>SHA-256:</strong> A strong hash function commonly used in cryptography.</p>
+    <p><strong>AES:</strong> An advanced encryption standard ensuring data security.</p>
+    <p><strong>RSA:</strong> An asymmetric encryption method ideal for secure data transmission.</p>
+
+    <footer>
+        <p>© 2025 Secure Encryption Team. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.1.10/jsrsasign-all-min.js"></script>
+    <script>
+        function toggleFields() {
+            const operation = document.getElementById('operation').value;
+            const additionalFields = document.getElementById('additionalFields');
+            additionalFields.innerHTML = ""; // Clear existing fields
+
+            if (operation === "DES" || operation === "AES" || operation === "Vigenere") {
+                additionalFields.innerHTML = `
+                    <label for="key">Key:</label>
+                    <input type="text" id="key" placeholder="Enter encryption key" />
+                `;
+            } else if (operation === "Sezar") {
+                additionalFields.innerHTML = `
+                    <label for="sezarShift">Shift Value:</label>
+                    <input type="number" id="sezarShift" placeholder="Enter shift value" />
+                `;
+            } else if (operation === "Afin") {
+                additionalFields.innerHTML = `
+                    <label for="aValue">A Value:</label>
+                    <input type="number" id="aValue" placeholder="Enter A value" />
+                    <label for="bValue">B Value:</label>
+                    <input type="number" id="bValue" placeholder="Enter B value" />
+                `;
+            } else if (operation === "RSA") {
+                additionalFields.innerHTML = `
+                    <label for="rsaPublicKey">Public Key (RSA):</label>
+                    <input type="text" id="rsaPublicKey" placeholder="Enter public key" />
+                    <label for="rsaPrivateKey">Private Key (RSA):</label>
+                    <input type="text" id="rsaPrivateKey" placeholder="Enter private key" />
+                `;
+            } else if (operation === "DiffieHelman") {
+                additionalFields.innerHTML = `
+                    <label for="privateKey">Enter Your Private Key:</label>
+                    <input type="text" id="privateKey" placeholder="Enter your private key" />
+                `;
+            }
+        }
+
+        function process() {
+            const text = document.getElementById('inputText').value.trim();
+            const operation = document.getElementById('operation').value;
+            const key = document.getElementById('key') ? document.getElementById('key').value.trim() : null;
+            const shift = document.getElementById('sezarShift') ? parseInt(document.getElementById('sezarShift').value) : null;
+            const a = document.getElementById('aValue') ? parseInt(document.getElementById('aValue').value) : null;
+            const b = document.getElementById('bValue') ? parseInt(document.getElementById('bValue').value) : null;
+            const publicKey = document.getElementById('rsaPublicKey') ? document.getElementById('rsaPublicKey').value.trim() : null;
+            const privateKey = document.getElementById('rsaPrivateKey') ? document.getElementById('rsaPrivateKey').value.trim() : null;
+            const userPrivateKey = document.getElementById('privateKey') ? document.getElementById('privateKey').value.trim() : null;
+
+            const results = document.getElementById('results');
+            results.innerHTML = ""; // Clear result area
+
+            if (!text && operation !== "DiffieHelman" && operation !== "RSA") {
+                alert("Please enter some text!");
+                return;
+            }
+
+            switch (operation) {
+                case "MD5":
+                    results.innerHTML = `<strong>MD5 Hash:</strong> ${CryptoJS.MD5(text).toString()}`;
+                    break;
+                case "SHA1":
+                    results.innerHTML = `<strong>SHA-1 Hash:</strong> ${CryptoJS.SHA1(text).toString()}`;
+                    break;
+                case "SHA256":
+                    results.innerHTML = `<strong>SHA-256 Hash:</strong> ${CryptoJS.SHA256(text).toString()}`;
+                    break;
+                case "SHA512":
+                    results.innerHTML = `<strong>SHA-512 Hash:</strong> ${CryptoJS.SHA512(text).toString()}`;
+                    break;
+                case "CRC32":
+                    results.innerHTML = `<strong>CRC-32:</strong> ${calculateCRC32(text)}`;
+                    break;
+                case "DES":
+                    if (key.length !== 8) {
+                        alert("DES key must be 8 characters long!");
+                        return;
+                    }
+                    const desEncrypted = CryptoJS.DES.encrypt(text, key).toString();
+                    const desDecrypted = CryptoJS.DES.decrypt(desEncrypted, key).toString(CryptoJS.enc.Utf8);
+                    results.innerHTML = `<strong>Encrypted (DES):</strong> ${desEncrypted}<br><strong>Decrypted:</strong> ${desDecrypted}`;
+                    break;
+                case "AES":
+                    const aesEncrypted = CryptoJS.AES.encrypt(text, key).toString();
+                    const aesDecrypted = CryptoJS.AES.decrypt(aesEncrypted, key).toString(CryptoJS.enc.Utf8);
+                    results.innerHTML = `<strong>Encrypted (AES):</strong> ${aesEncrypted}<br><strong>Decrypted:</strong> ${aesDecrypted}`;
+                    break;
+                case "Vigenere":
+                    if (!key) {
+                        alert("Please enter a key for Vigenère encryption!");
+                        return;
+                    }
+                    results.innerHTML = `<strong>Encrypted (Vigenère):</strong> ${vigenereEncrypt(text, key)}<br><strong>Decrypted:</strong> ${vigenereDecrypt(text, key)}`;
+                    break;
+                case "Sezar":
+                    if (isNaN(shift)) {
+                        alert("Please enter a shift value!");
+                        return;
+                    }
+                    results.innerHTML = `<strong>Encrypted (Caesar):</strong> ${caesarCipher(text, shift)}`;
+                    break;
+                case "Afin":
+                    if (isNaN(a) || isNaN(b)) {
+                        alert("Please enter both A and B values!");
+                        return;
+                    }
+                    results.innerHTML = `<strong>Encrypted (Affine):</strong> ${affineCipher(text, a, b)}`;
+                    break;
+                case "RSA":
+                    if (!publicKey || !privateKey) {
+                        alert("Please enter both RSA keys!");
+                        return;
+                    }
+                    const rsaEncrypted = encryptWithRSA(text, publicKey);
+                    const rsaDecrypted = decryptWithRSA(rsaEncrypted, privateKey);
+                    results.innerHTML = `<strong>Encrypted (RSA):</strong> ${rsaEncrypted}<br><strong>Decrypted:</strong> ${rsaDecrypted}`;
+                    break;
+                case "Atbash":
+                    results.innerHTML = `<strong>Atbash Encrypted:</strong> ${atbashCipher(text)}`;
+                    break;
+                case "DiffieHelman":
+                    if (!userPrivateKey) {
+                        alert("Please enter your private key for Diffie-Hellman!");
+                        return;
+                    }
+                    const p = 23; // Example prime number
+                    const g = 5;  // Required constant
+                    const userPublicKey = Math.pow(g, userPrivateKey) % p;
+                    results.innerHTML = `<strong>Calculated User Public Key:</strong> ${userPublicKey}`;
+                    break;
+                default:
+                    alert("Invalid operation selected!");
+                    break;
+            }
+        }
+
+        function calculateCRC32(str) {
+            let crc32Table = [];
+            let crc32 = 0;
+            for (let i = 0; i < 256; i++) {
+                let c = i;
+                for (let j = 8; j > 0; j--) {
+                    if (c & 1) c = (c >>> 1) ^ 0xedb88320;
+                    else c >>>= 1;
+                }
+                crc32Table[i] = c;
+            }
+            for (let i = 0; i < str.length; i++) {
+                crc32 = (crc32 >>> 8) ^ crc32Table[(crc32 ^ str.charCodeAt(i)) & 0xff];
+            }
+            return (crc32 ^ 0xffffffff) >>> 0;
+        }
+
+        function vigenereEncrypt(text, key) {
+            let result = '';
+            let keyIndex = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const charCode = char.charCodeAt(0);
+                const keyCode = key[keyIndex % key.length].charCodeAt(0);
+                result += String.fromCharCode((charCode + keyCode) % 256);
+                keyIndex++;
+            }
+            return result;
+        }
+
+        function vigenereDecrypt(text, key) {
+            let result = '';
+            let keyIndex = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const charCode = char.charCodeAt(0);
+                const keyCode = key[keyIndex % key.length].charCodeAt(0);
+                result += String.fromCharCode((charCode - keyCode + 256) % 256);
+                keyIndex++;
+            }
+            return result;
+        }
+
+        function caesarCipher(text, shift) {
+            return text.split('')
+                .map(char => String.fromCharCode(char.charCodeAt(0) + shift))
+                .join('');
+        }
+
+        function affineCipher(text, a, b) {
+            return text.split('')
+                .map(char => String.fromCharCode((a * (char.charCodeAt(0) - 65) + b) % 26 + 65))
+                .join('');
+        }
+
+        function atbashCipher(text) {
+            return text.split('')
+                .map(char => String.fromCharCode(155 - char.charCodeAt(0)))
+                .join('');
+        }
+
+        function encryptWithRSA(text, publicKey) {
+            const rsaKey = new RSAKey();
+            rsaKey.setPublic(publicKey, '10001');
+            return rsaKey.encrypt(text);
+        }
+
+        function decryptWithRSA(encryptedText, privateKey) {
+            const rsaKey = new RSAKey();
+            rsaKey.setPrivate(privateKey, '10001');
+            return rsaKey.decrypt(encryptedText);
+        }
+    </script>
+</body>
+</html>
